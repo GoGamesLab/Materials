@@ -1,8 +1,9 @@
 package main
 
 import (
-	"Materials/pkg/craft"
 	"fmt"
+
+	"github.com/GoGamesLab/Materials/pkg/craft"
 )
 
 func main() {
