@@ -34,9 +34,6 @@ func Load(configDir string) *Config {
 		environment = "production"
 	}
 
-	wd, _ := os.Getwd()
-	fmt.Println("cwd:", wd)
-
 	var configuration Config
 
 	configFile := fmt.Sprintf("%s/config.%s.yaml", configDir, environment)

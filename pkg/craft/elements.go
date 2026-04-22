@@ -133,12 +133,10 @@ func RegisterElement(e Element) error {
 	defer elementsMutex.Unlock()
 
 	if _, exists := Elements[e.ID]; exists {
-		return fmt.Errorf("🧨 Elemento com ID %d já registrada", e.ID)
+		return fmt.Errorf("🧨 Elemento com ID %d já registrado", e.ID)
 	}
 
 	Elements[e.ID] = e
-
-	fmt.Printf("⚛ Elemento %s registrado\n", e.Name)
 
 	return nil
 }

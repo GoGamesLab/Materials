@@ -1,7 +1,6 @@
 package craft
 
 import (
-	"fmt"
 	"math"
 )
 
@@ -70,14 +69,15 @@ func (m *Machine) Update(dt float32) {
 	for _, step := range m.Procedures {
 		p := step.GetOperation()
 
-		// 1. Check de Ativação
+		// Check de Ativação
 		if m.Heat >= p.ActivationTemp {
-			// 2. Execução (Aqui entra o Type Switch que discutimos)
+			// Execução
 			m.executeStep(step, dt)
 
-			// 3. Balanço Térmico
-			// m.Heat += p.BaseEnergyChange * dt
 			m.Heat = calculateTemperature(m.Heat, p.BaseEnergyChange*dt, p.Dissipation)
+		} else {
+			// Balanço Térmico
+			m.Heat += p.BaseEnergyChange * dt
 		}
 	}
 }
@@ -101,7 +101,6 @@ func (m *Machine) executeStep(step Procedure, dt float32) {
 	// mas tem um desempenho melhor (só calcular tudo ao final do tempo)
 	if m.Progress >= p.Duration {
 		// O PROCESSO TERMINOU: Hora de realizar a operação
-		fmt.Printf("⏳ %s: %.1f%% concluído...\n", p.Name, 100.0)
 		switch v := step.(type) {
 		case RefineOperation:
 			m.finishRefination(v, dt)
@@ -113,11 +112,6 @@ func (m *Machine) executeStep(step Procedure, dt float32) {
 
 		// 3. Reseta o progresso para o próximo ciclo (ou próximo passo da chain)
 		m.Progress = 0
-		fmt.Printf("✅ Processo %s finalizado!\n", p.Name)
-	} else {
-		// O PROCESSO ESTÁ EM ANDAMENTO
-		percent := (m.Progress / p.Duration) * 100
-		fmt.Printf("⏳ %s: %.1f%% concluído...\n", p.Name, percent)
 	}
 }
 

@@ -36,41 +36,6 @@ type Material struct {
 	Conductivity  float32 // Quão rápido ele transfere calor para vizinhos
 }
 
-// Nova função Reduce, irá reduzir o material à sua composição
-// Dada uma quantidade de material, quantas unidades fracionárias de substâncias resulta sem perdas?
-// A perda por substância deve ser aplicada pelo processo
-func (m *Material) Reduce(quantity float32) map[SubstanceID]float32 {
-	r := make(map[SubstanceID]float32)
-	for _, c := range m.Composites {
-		r[c.substance] = (c.percentual / 100) * quantity
-	}
-
-	return r
-}
-
-// 3. Lei de Lavoisier: Subtraímos do material
-func (m *Material) xReduce(id SubstanceID, amount float32) float32 {
-	for i, comp := range m.Composites {
-		if comp.substance == id {
-			if m.Composites[i].percentual >= amount {
-				s, _ := GetSubstance(id)
-				fmt.Printf("Reduzido %f de %s partindo de %f para %s\n", amount, s.Name, m.Composites[i].percentual, m.Name)
-				// ISSO ESTAVA ERRADO, ESTAMOS DESTRUINDO A COMPOSIÇÃO
-				// DO MATERIAL NA TABELA!!!
-				//m.Composites[i].percentual -= amount
-				return amount
-			}
-			// Se pedir mais do que tem, retorna o que restava
-			remaining := m.Composites[i].percentual
-			// ISSO ESTAVA ERRADO, ESTAMOS DESTRUINDO A COMPOSIÇÃO
-			// DO MATERIAL NA TABELA!!!
-			//m.Composites[i].percentual = 0
-			return remaining
-		}
-	}
-	return 0
-}
-
 const (
 	AirID      MaterialID = 0
 	CoalID     MaterialID = 1
@@ -183,8 +148,6 @@ func RegisterMaterial(m Material) error {
 	Materials[m.ID] = m
 	Signatures[sig] = append(Signatures[sig], m.ID)
 
-	fmt.Printf("📦 Material %s registrado com assinatura: %s\n", m.Name, sig)
-
 	return nil
 }
 
@@ -193,4 +156,13 @@ func GetMaterial(id MaterialID) (*Material, error) {
 		return &m, nil
 	}
 	return nil, fmt.Errorf("🧨 Material %v: not found", id)
+}
+
+func (m *Material) Reduce(quantity float32) map[SubstanceID]float32 {
+	r := make(map[SubstanceID]float32)
+	for _, c := range m.Composites {
+		r[c.substance] = (c.percentual / 100) * quantity
+	}
+
+	return r
 }

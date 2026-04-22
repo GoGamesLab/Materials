@@ -212,8 +212,6 @@ func RegisterSubstance(s Substance) error {
 	}
 	Substances[s.ID] = s
 
-	fmt.Printf("🧪 Substância %s registrada\n", s.Name)
-
 	return nil
 }
 
@@ -237,18 +235,11 @@ func (s Substance) GetState(currentTemp float32) PhysicalState {
 	return Gas
 }
 
-// Nova função Reduce, irá reduzir a substância à sua composição
-// Dada uma quantidade de substância, quantas unidades fracionárias de elementos resulta sem perdas?
-// A perda por elemento deve ser aplicada pelo processo
-func (m *Substance) Reduce(quantity float32) map[ElementID]float32 {
+func (s *Substance) Reduce(quantity float32) map[ElementID]float32 {
 	r := make(map[ElementID]float32)
-	for _, c := range m.Composition {
+	for _, c := range s.Composition {
 		r[c.Element] = float32(c.Amount) * quantity
 	}
 
 	return r
-}
-
-func (e *Element) Bind(id ElementID, amount int) (ElementID, int) {
-	return id, amount
 }

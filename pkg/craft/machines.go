@@ -51,11 +51,11 @@ func init() {
 		Operation: Operation{
 			ID:               CrudeOilCombustionID,
 			Name:             "Combustão de Óleo Crú",
-			RequiredTemp:     600.0, // Temperatura ideal de queima
-			ActivationTemp:   300.0, // FlashPoint do seu Carvão
-			Duration:         10.0,  // Cada unidade de carvão dura 10 segundos
+			RequiredTemp:     700.0, // Temperatura ideal de queima
+			ActivationTemp:   400.0, // FlashPoint do seu Óleo
+			Duration:         15.0,  // Cada unidade de óleo dura 5 segundos
 			EnergyCost:       0,     // Não gasta energia elétrica/externa
-			BaseEnergyChange: 150.0, // Produz calor para a máquina e arredores
+			BaseEnergyChange: 250.0, // Produz calor para a máquina e arredores
 			Dissipation:      3.5,   // Perda para o ambiente (0 = 100%)
 		},
 		// O que a fogueira "consome" do mundo
@@ -86,7 +86,7 @@ func init() {
 	RegisterMachine(Machine{
 		ID:   CrudeOilBurnerID,
 		Name: "Tambor de Óleo",
-		Heat: 310.0, // Iniciada com um fósforo (acima dos 300°C de ativação)
+		Heat: 310.0, // Iniciada com um fósforo (abaixo dos 400°C de ativação)
 		Procedures: []Procedure{
 			RefineOperations[CrudeOilCombustionID], // A fogueira está configurada para queimar óleo crú
 		},
@@ -103,8 +103,6 @@ func RegisterMachine(m Machine) error {
 
 	Machines[m.ID] = m
 
-	fmt.Printf("⚙️ Máquina %s registrada\n", m.Name)
-
 	return nil
 }
 
@@ -116,13 +114,13 @@ func RegisterOperation(p Procedure) error {
 	switch p := p.(type) {
 	case RefineOperation:
 		if _, exists := RefineOperations[id]; exists {
-			return fmt.Errorf("🧨 Operação de transformar com ID %d já registrada", id)
+			return fmt.Errorf("🧨 Operação de refinar com ID %d já registrada", id)
 		}
 
 		RefineOperations[id] = p
 	case SynthesizeOperation:
 		if _, exists := SynthesizeOperations[id]; exists {
-			return fmt.Errorf("🧨 Operação de transformar com ID %d já registrada", id)
+			return fmt.Errorf("🧨 Operação de sintetizar com ID %d já registrada", id)
 		}
 
 		SynthesizeOperations[id] = p
@@ -135,8 +133,6 @@ func RegisterOperation(p Procedure) error {
 	default:
 		return fmt.Errorf("🧨 Tipo de operação desconhecida: %T", p)
 	}
-
-	fmt.Printf("⚙️ Operação %s registrada\n", p.GetOperation().Name)
 
 	return nil
 }
@@ -194,4 +190,46 @@ func (m *Machine) ProduceMaterial(id MaterialID, amount float32) {
 	}
 	unit := 1 * amount / 100
 	m.inventory.Materials[id] += unit
+}
+
+func (m *Machine) ConsumeElement(id ElementID, amount float32) {
+	if amount <= 0 {
+		return
+	}
+	if m.inventory.Elements == nil {
+		m.ProduceElement(id, amount)
+	}
+	unit := 1 * amount / 100
+	m.inventory.Elements[id] -= unit
+	if m.inventory.Elements[id] <= 0 {
+		delete(m.inventory.Elements, id)
+	}
+}
+
+func (m *Machine) ConsumeSubstance(id SubstanceID, amount float32) {
+	if amount <= 0 {
+		return
+	}
+	if m.inventory.Substances == nil {
+		m.ProduceSubstance(id, amount)
+	}
+	unit := 1 * amount / 100
+	m.inventory.Substances[id] -= unit
+	if m.inventory.Substances[id] <= 0 {
+		delete(m.inventory.Substances, id)
+	}
+}
+
+func (m *Machine) ConsumeMaterial(id MaterialID, amount float32) {
+	if amount <= 0 {
+		return
+	}
+	if m.inventory.Materials == nil {
+		m.ProduceMaterial(id, amount)
+	}
+	unit := 1 * amount / 100
+	m.inventory.Materials[id] -= unit
+	if m.inventory.Materials[id] <= 0 {
+		delete(m.inventory.Materials, id)
+	}
 }
