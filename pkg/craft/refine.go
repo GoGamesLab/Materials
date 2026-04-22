@@ -36,11 +36,11 @@ func (m *Machine) finishRefination(d RefineOperation, dt float32) {
 			if m.Heat >= element.BoilingPoint {
 				currentLoss := (1.0 - float32(math.Exp(-0.5*float64(m.Heat-element.BoilingPoint)))) * element.Volatility * 100.0 * dt
 				// aqui, adicionar a quantidade se já existir no inventário
-				m.ConsumeElement(id, currentLoss)
+				Consume(m, id, currentLoss)
 			} else {
 				// não esquentou o suficiente, acumula no inventário
 				// mas quando começar a esquentar deve queimar o inventário também!
-				m.ProduceElement(id, quantity)
+				Produce(m, id, quantity)
 			}
 		}
 	}

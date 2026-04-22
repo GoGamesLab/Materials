@@ -106,35 +106,29 @@ func RegisterMachine(m Machine) error {
 	return nil
 }
 
+func registerOp[T Procedure](store map[OperationID]T, op T) error {
+	id := op.GetOperation().ID
+	if _, exists := store[id]; exists {
+		return fmt.Errorf("🧨 Operação com ID %d já registrada", id)
+	}
+	store[id] = op
+	return nil
+}
+
 func RegisterOperation(p Procedure) error {
 	machinesMutex.Lock()
 	defer machinesMutex.Unlock()
 
-	id := p.GetOperation().ID
-	switch p := p.(type) {
+	switch op := p.(type) {
 	case RefineOperation:
-		if _, exists := RefineOperations[id]; exists {
-			return fmt.Errorf("🧨 Operação de refinar com ID %d já registrada", id)
-		}
-
-		RefineOperations[id] = p
+		return registerOp(RefineOperations, op)
 	case SynthesizeOperation:
-		if _, exists := SynthesizeOperations[id]; exists {
-			return fmt.Errorf("🧨 Operação de sintetizar com ID %d já registrada", id)
-		}
-
-		SynthesizeOperations[id] = p
+		return registerOp(SynthesizeOperations, op)
 	case TransformOperation:
-		if _, exists := TransformOperations[id]; exists {
-			return fmt.Errorf("🧨 Operação de transformar com ID %d já registrada", id)
-		}
-
-		TransformOperations[id] = p
+		return registerOp(TransformOperations, op)
 	default:
 		return fmt.Errorf("🧨 Tipo de operação desconhecida: %T", p)
 	}
-
-	return nil
 }
 
 func GetMachine(id MachineID) Machine {
@@ -142,94 +136,4 @@ func GetMachine(id MachineID) Machine {
 		return m
 	}
 	return Machines[EntropyID] // Fallback seguro
-}
-
-func (m *Machine) AddElementToInventory(id ElementID, amount float32) {
-	// A produção considera percentual
-	m.ProduceElement(id, amount*100)
-}
-
-func (m *Machine) AddSubstanceToInventory(id SubstanceID, amount float32) {
-	// A produção considera percentual
-	m.ProduceSubstance(id, amount*100)
-}
-
-func (m *Machine) AddMaterialToInventory(id MaterialID, amount float32) {
-	// A produção considera percentual
-	m.ProduceMaterial(id, amount*100)
-}
-
-func (m *Machine) ProduceElement(id ElementID, amount float32) {
-	if amount <= 0 {
-		return
-	}
-	if m.inventory.Elements == nil {
-		m.inventory.Elements = make(map[ElementID]float32)
-	}
-	unit := 1 * amount / 100
-	m.inventory.Elements[id] += unit
-}
-
-func (m *Machine) ProduceSubstance(id SubstanceID, amount float32) {
-	if amount <= 0 {
-		return
-	}
-	if m.inventory.Substances == nil {
-		m.inventory.Substances = make(map[SubstanceID]float32)
-	}
-	unit := 1 * amount / 100
-	m.inventory.Substances[id] += unit
-}
-
-func (m *Machine) ProduceMaterial(id MaterialID, amount float32) {
-	if amount <= 0 {
-		return
-	}
-	if m.inventory.Materials == nil {
-		m.inventory.Materials = make(map[MaterialID]float32)
-	}
-	unit := 1 * amount / 100
-	m.inventory.Materials[id] += unit
-}
-
-func (m *Machine) ConsumeElement(id ElementID, amount float32) {
-	if amount <= 0 {
-		return
-	}
-	if m.inventory.Elements == nil {
-		m.ProduceElement(id, amount)
-	}
-	unit := 1 * amount / 100
-	m.inventory.Elements[id] -= unit
-	if m.inventory.Elements[id] <= 0 {
-		delete(m.inventory.Elements, id)
-	}
-}
-
-func (m *Machine) ConsumeSubstance(id SubstanceID, amount float32) {
-	if amount <= 0 {
-		return
-	}
-	if m.inventory.Substances == nil {
-		m.ProduceSubstance(id, amount)
-	}
-	unit := 1 * amount / 100
-	m.inventory.Substances[id] -= unit
-	if m.inventory.Substances[id] <= 0 {
-		delete(m.inventory.Substances, id)
-	}
-}
-
-func (m *Machine) ConsumeMaterial(id MaterialID, amount float32) {
-	if amount <= 0 {
-		return
-	}
-	if m.inventory.Materials == nil {
-		m.ProduceMaterial(id, amount)
-	}
-	unit := 1 * amount / 100
-	m.inventory.Materials[id] -= unit
-	if m.inventory.Materials[id] <= 0 {
-		delete(m.inventory.Materials, id)
-	}
 }

@@ -138,3 +138,66 @@ func calculateTemperature(current, heatGain float32, dissipation float32) float3
 
 	return float32(Tenv + delta)
 }
+
+type ResourceID interface {
+	ElementID | SubstanceID | MaterialID
+}
+
+func getInventoryMap[K ResourceID](m *Machine) *map[K]float32 {
+	var anyMap any
+	switch any(new(K)).(type) {
+	case *ElementID:
+		anyMap = &m.inventory.Elements
+	case *SubstanceID:
+		anyMap = &m.inventory.Substances
+	case *MaterialID:
+		anyMap = &m.inventory.Materials
+	}
+	return anyMap.(*map[K]float32)
+}
+
+func Store[K ResourceID](m *Machine, id K, amount float32) {
+	if amount <= 0 {
+		return
+	}
+
+	invMap := getInventoryMap[K](m)
+	if *invMap == nil {
+		*invMap = make(map[K]float32)
+	}
+
+	unit := amount
+	(*invMap)[id] += unit
+}
+
+func Produce[K ResourceID](m *Machine, id K, amount float32) {
+	if amount <= 0 {
+		return
+	}
+
+	invMap := getInventoryMap[K](m)
+	if *invMap == nil {
+		*invMap = make(map[K]float32)
+	}
+
+	unit := amount / 100
+	(*invMap)[id] += unit
+}
+
+func Consume[K ResourceID](m *Machine, id K, amount float32) {
+	if amount <= 0 {
+		return
+	}
+
+	invMap := getInventoryMap[K](m)
+	if *invMap == nil {
+		return // Ou m.Produce(id, amount) se quiser manter o comportamento original de 'negativar'
+	}
+
+	unit := amount / 100
+	(*invMap)[id] -= unit
+
+	if (*invMap)[id] <= 0 {
+		delete(*invMap, id)
+	}
+}
