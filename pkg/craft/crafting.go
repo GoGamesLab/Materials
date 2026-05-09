@@ -1,7 +1,12 @@
 package craft
 
 import (
+	"flag"
+	"log/slog"
 	"math"
+	"os"
+
+	"github.com/GoGamesLab/Materials/pkg/config"
 )
 
 // ID único para busca rápida
@@ -63,6 +68,17 @@ type Machine struct {
 	Procedures []Procedure
 	Progress   float32
 	inventory  Inventory
+}
+
+var Logger *slog.Logger
+
+func init() {
+	configDir := flag.String("configDir", "config", "Caminho para pasta de configuração")
+	flag.Parse()
+
+	c := config.Load(*configDir)
+
+	Logger = slog.New(slog.NewTextHandler(os.Stdout, &slog.HandlerOptions{Level: slog.Level(c.Application.Log.Level)}))
 }
 
 func (m *Machine) Update(dt float32) {

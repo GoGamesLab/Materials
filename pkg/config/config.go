@@ -10,21 +10,10 @@ import (
 
 type Config struct {
 	Application struct {
-		Name    string `yaml:"name" env:"APP_NAME" env-default:"Grind"`
-		Startup struct {
-			Script string `yaml:"script" env:"STARTUP_SCRIPT" env-default:"startup.lua"`
-		} `yaml:"startup"`
-		Screen struct {
-			Width      int    `yaml:"width" env:"SCREEN_WIDTH" env-default:"1024"`
-			Height     int    `yaml:"height" env:"SCREEN_HEIGHT" env-default:"768"`
-			Background string `yaml:"background" env:"SCREEN_BACKGROUND" env-default:"background.png"`
-		} `yaml:"screen"`
-		Hero struct {
-			Atlas   string `yaml:"atlas" env:"HERO_ATLAS" env-default:"runner.png"`
-			Scale   int    `yaml:"scale" env:"HERO_SCALE" env-default:"64"`
-			Unit    int    `yaml:"unit" env:"HERO_UNIT" env-default:"16"`
-			GroundY int    `yaml:"ground" env:"HERO_GROUND_Y" env-default:"680"`
-		} `yaml:"hero"`
+		Name string `yaml:"name" env:"APP_NAME" env-default:"Grind"`
+		Log  struct {
+			Level int `yaml:"level" env:"LOG_LEVEL" env-default:"0"`
+		} `yaml:"log"`
 	} `yaml:"application"`
 }
 
