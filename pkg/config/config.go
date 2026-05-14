@@ -12,7 +12,7 @@ type Config struct {
 	Application struct {
 		Name string `yaml:"name" env:"APP_NAME" env-default:"Grind"`
 		Log  struct {
-			Level int `yaml:"level" env:"LOG_LEVEL" env-default:"0"`
+			Level string `yaml:"level" env:"LOG_LEVEL" env-default:"Info"`
 		} `yaml:"log"`
 	} `yaml:"application"`
 }
