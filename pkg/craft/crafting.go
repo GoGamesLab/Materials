@@ -46,6 +46,7 @@ const (
 type Procedure interface {
 	GetOperation() Operation
 	Kind() string
+	Execute(m *Machine, dt float32)
 }
 
 type ProductType int
@@ -116,15 +117,8 @@ func (m *Machine) executeStep(step Procedure, dt float32) {
 	// isso aqui não está sendo um processo contínuo
 	// mas tem um desempenho melhor (só calcular tudo ao final do tempo)
 	if m.Progress >= p.Duration {
-		// O PROCESSO TERMINOU: Hora de realizar a operação
-		switch v := step.(type) {
-		case RefineOperation:
-			m.finishRefination(v, dt)
-		case SynthesizeOperation:
-			m.finishSynthesization(v, dt)
-		case TransformOperation:
-			m.finishTransformation(v, dt)
-		}
+		// O PROCESSO TERMINOU: O objeto Procedure agora decide como se executar
+		step.Execute(m, dt)
 
 		// 3. Reseta o progresso para o próximo ciclo (ou próximo passo da chain)
 		m.Progress = 0

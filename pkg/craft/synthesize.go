@@ -12,6 +12,10 @@ type SynthesizeOperation struct {
 func (s SynthesizeOperation) GetOperation() Operation { return s.Operation }
 func (s SynthesizeOperation) Kind() string            { return "synthesize" }
 
+func (s SynthesizeOperation) Execute(m *Machine, dt float32) {
+	m.finishSynthesization(s, dt)
+}
+
 func (m *Machine) finishSynthesization(s SynthesizeOperation, dt float32) {
 	// Lógica:
 	// 1. Consome os itens (Composites) do estoque de entrada

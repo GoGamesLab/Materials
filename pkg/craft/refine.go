@@ -15,6 +15,10 @@ type RefineOperation struct {
 func (d RefineOperation) GetOperation() Operation { return d.Operation }
 func (d RefineOperation) Kind() string            { return "refine" }
 
+func (d RefineOperation) Execute(m *Machine, dt float32) {
+	m.finishRefination(d, dt)
+}
+
 func (m *Machine) finishRefination(d RefineOperation, dt float32) {
 	material, _ := GetMaterial(d.Input)
 	m.inventory.Materials[d.Input] -= 1

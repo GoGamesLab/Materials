@@ -12,6 +12,10 @@ type TransformOperation struct {
 func (s TransformOperation) GetOperation() Operation { return s.Operation }
 func (s TransformOperation) Kind() string            { return "transform" }
 
+func (t TransformOperation) Execute(m *Machine, dt float32) {
+	m.finishTransformation(t, dt)
+}
+
 func (m *Machine) finishTransformation(t TransformOperation, dt float32) {
 	//
 }
