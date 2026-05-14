@@ -30,3 +30,4 @@ go.work
 __*
 config.local.yaml
 .DS_Store
+.env
