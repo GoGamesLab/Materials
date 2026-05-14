@@ -10,26 +10,18 @@ import (
 
 var Logger = slog.New(slog.NewTextHandler(os.Stdout, &slog.HandlerOptions{Level: slog.LevelInfo}))
 
-func burnCoal() craft.Inventory {
-	var fogueira craft.Machine = craft.GetMachine(craft.CoalBurnerID)
-	Logger.Info("Queimar 10 unidades de Carvão numa fogueira")
-	craft.Store(&fogueira, craft.CoalID, 10)
-	for fogueira.GetInventory().Materials[craft.CoalID] > 0 {
-		fogueira.Update(1) // Queimar uma unidade por vez!
-		Logger.Info(fmt.Sprintf("🔥 Temperatura %f", fogueira.Heat))
-	}
-	return fogueira.GetInventory()
-}
+func burnFuel(machineID craft.MachineID, fuelID craft.MaterialID, amount float32) craft.Inventory {
+	machine := craft.GetMachine(machineID)
+	material, _ := craft.GetMaterial(fuelID)
 
-func burnOil() craft.Inventory {
-	var tamborOleo craft.Machine = craft.GetMachine(craft.CrudeOilBurnerID)
-	Logger.Info("Queimar 10 unidades de Óleo Crú num tambor")
-	craft.Store(&tamborOleo, craft.CrudeOilID, 10)
-	for tamborOleo.GetInventory().Materials[craft.CrudeOilID] > 0 {
-		tamborOleo.Update(1) // Queimar uma unidade por vez!
-		Logger.Info(fmt.Sprintf("🔥 Temperatura %f", tamborOleo.Heat))
+	Logger.Info(fmt.Sprintf("Iniciando combustão: %f unidades de %s na máquina %s", amount, material.Name, machine.Name))
+
+	craft.Store(&machine, fuelID, amount)
+	for machine.GetInventory().Materials[fuelID] > 0 {
+		machine.Update(1)
+		Logger.Info(fmt.Sprintf("🔥 [%s] Temperatura: %.2f°C", machine.Name, machine.Heat))
 	}
-	return tamborOleo.GetInventory()
+	return machine.GetInventory()
 }
 
 func printResidues(i craft.Inventory) {
@@ -54,6 +46,7 @@ func printResidues(i craft.Inventory) {
 }
 
 func main() {
-	printResidues(burnCoal())
-	printResidues(burnOil())
+	printResidues(burnFuel(craft.CoalBurnerID, craft.CoalID, 10))
+
+	printResidues(burnFuel(craft.CrudeOilBurnerID, craft.CrudeOilID, 10))
 }
