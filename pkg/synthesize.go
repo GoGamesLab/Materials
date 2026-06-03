@@ -1,4 +1,4 @@
-package craft
+package materials
 
 // Basicamente sintetizar é processar uma série de elementos e torná-los num material
 

@@ -1,4 +1,4 @@
-package craft
+package materials
 
 import (
 	"math"

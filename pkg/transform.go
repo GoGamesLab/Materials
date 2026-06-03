@@ -1,4 +1,4 @@
-package craft
+package materials
 
 // Transformar é basicamente mudar a forma de um material em outra forma
 
