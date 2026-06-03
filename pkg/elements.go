@@ -5,6 +5,11 @@ import (
 	"sync"
 )
 
+// ID único para busca rápida
+type ElementID uint16
+type SubstanceID uint16
+type MaterialID uint16
+
 type Element struct {
 	ID            ElementID
 	Name          string

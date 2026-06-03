@@ -17,8 +17,8 @@ const (
 )
 
 type Composite struct {
-	substance  SubstanceID
-	percentual float32
+	Substance  SubstanceID
+	Percentual float32
 }
 
 type Material struct {
@@ -122,13 +122,13 @@ func GenerateSignature(composites []Composite) string {
 	copy(temp, composites)
 
 	sort.Slice(temp, func(i, j int) bool {
-		return temp[i].substance < temp[j].substance
+		return temp[i].Substance < temp[j].Substance
 	})
 
 	// 2. Montar a string: "SubstanceID:Percentage|..."
 	var sb strings.Builder
 	for _, c := range temp {
-		fmt.Fprintf(&sb, "%d|", c.substance)
+		fmt.Fprintf(&sb, "%d|", c.Substance)
 	}
 	return sb.String()
 }
@@ -161,7 +161,7 @@ func GetMaterial(id MaterialID) (*Material, error) {
 func (m *Material) Reduce(quantity float32) map[SubstanceID]float32 {
 	r := make(map[SubstanceID]float32)
 	for _, c := range m.Composites {
-		r[c.substance] = (c.percentual / 100) * quantity
+		r[c.Substance] = (c.Percentual / 100) * quantity
 	}
 
 	return r
