@@ -3,6 +3,8 @@ package craft
 import (
 	"fmt"
 	"sync"
+
+	"github.com/GoGamesLab/Inventory/pkg/container"
 )
 
 // Exemplo de ID para o processo
@@ -101,6 +103,11 @@ func RegisterMachine(m Machine) error {
 		return fmt.Errorf("🧨 Máquina com ID %d já registrada", m.ID)
 	}
 
+	m.Supply = &Supply{
+		Materials:  *container.NewStorage(),
+		Substances: *container.NewStorage(),
+		Elements:   *container.NewStorage(),
+	}
 	Machines[m.ID] = m
 
 	return nil

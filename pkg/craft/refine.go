@@ -2,6 +2,8 @@ package craft
 
 import (
 	"math"
+
+	"github.com/GoGamesLab/Inventory/pkg/container"
 )
 
 // Basicamente refinar é processar um material e decompor ele em seus constituintes
@@ -21,9 +23,8 @@ func (d RefineOperation) Execute(m *Machine, dt float32) {
 
 func (m *Machine) finishRefination(d RefineOperation, dt float32) {
 	material, _ := GetMaterial(d.Input)
-	m.inventory.Materials[d.Input] -= 1
-	if m.inventory.Materials[d.Input] <= 0 {
-		delete(m.inventory.Materials, d.Input)
+	q, ok := m.Supply.Materials.RemoveItem(container.ItemID(material.ID), 1)
+	if q == 0 || !ok {
 		return
 	}
 

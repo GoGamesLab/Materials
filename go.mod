@@ -2,7 +2,12 @@ module github.com/GoGamesLab/Materials
 
 go 1.26.1
 
-require github.com/ilyakaznacheev/cleanenv v1.5.0
+require (
+    github.com/ilyakaznacheev/cleanenv v1.5.0
+    github.com/GoGamesLab/Inventory v0.0.0
+)
+
+replace github.com/GoGamesLab/Inventory => ../Inventory
 
 require (
 	github.com/BurntSushi/toml v1.6.0 // indirect

@@ -2,6 +2,8 @@ package craft
 
 import (
 	"math"
+
+	"github.com/GoGamesLab/Inventory/pkg/container"
 )
 
 // ID único para busca rápida
@@ -51,10 +53,10 @@ const (
 	SubstanceType
 )
 
-type Inventory struct {
-	Materials  map[MaterialID]float32
-	Substances map[SubstanceID]float32
-	Elements   map[ElementID]float32
+type Supply struct {
+	Materials  container.Storage
+	Substances container.Storage
+	Elements   container.Storage
 }
 
 type Machine struct {
@@ -63,7 +65,7 @@ type Machine struct {
 	Heat       float32 // Temperatura interna atual
 	Procedures []Procedure
 	Progress   float32
-	inventory  Inventory
+	Supply     *Supply
 }
 
 func (m *Machine) Update(dt float32) {
@@ -83,11 +85,11 @@ func (m *Machine) Update(dt float32) {
 	}
 }
 
-func (m *Machine) GetInventory() Inventory {
-	return Inventory{
-		Materials:  m.inventory.Materials,
-		Substances: m.inventory.Substances,
-		Elements:   m.inventory.Elements,
+func (m *Machine) GetSupply() Supply {
+	return Supply{
+		Materials:  m.Supply.Materials,
+		Substances: m.Supply.Substances,
+		Elements:   m.Supply.Elements,
 	}
 }
 
@@ -137,31 +139,19 @@ type ResourceID interface {
 	ElementID | SubstanceID | MaterialID
 }
 
-func getInventoryMap[K ResourceID](m *Machine) *map[K]float32 {
-	var anyMap any
-	switch any(new(K)).(type) {
-	case *ElementID:
-		anyMap = &m.inventory.Elements
-	case *SubstanceID:
-		anyMap = &m.inventory.Substances
-	case *MaterialID:
-		anyMap = &m.inventory.Materials
-	}
-	return anyMap.(*map[K]float32)
-}
-
 func Store[K ResourceID](m *Machine, id K, amount float32) {
 	if amount <= 0 {
 		return
 	}
 
-	invMap := getInventoryMap[K](m)
-	if *invMap == nil {
-		*invMap = make(map[K]float32)
+	switch any(new(K)).(type) {
+	case *ElementID:
+		m.Supply.Elements.AddItem(container.ItemID(id), amount)
+	case *SubstanceID:
+		m.Supply.Substances.AddItem(container.ItemID(id), amount)
+	case *MaterialID:
+		m.Supply.Materials.AddItem(container.ItemID(id), amount)
 	}
-
-	unit := amount
-	(*invMap)[id] += unit
 }
 
 func Produce[K ResourceID](m *Machine, id K, amount float32) {
@@ -169,13 +159,14 @@ func Produce[K ResourceID](m *Machine, id K, amount float32) {
 		return
 	}
 
-	invMap := getInventoryMap[K](m)
-	if *invMap == nil {
-		*invMap = make(map[K]float32)
+	switch any(new(K)).(type) {
+	case *ElementID:
+		m.Supply.Elements.AddItem(container.ItemID(id), amount/100)
+	case *SubstanceID:
+		m.Supply.Substances.AddItem(container.ItemID(id), amount/100)
+	case *MaterialID:
+		m.Supply.Materials.AddItem(container.ItemID(id), amount/100)
 	}
-
-	unit := amount / 100
-	(*invMap)[id] += unit
 }
 
 func Consume[K ResourceID](m *Machine, id K, amount float32) {
@@ -183,15 +174,12 @@ func Consume[K ResourceID](m *Machine, id K, amount float32) {
 		return
 	}
 
-	invMap := getInventoryMap[K](m)
-	if *invMap == nil {
-		return // Ou m.Produce(id, amount) se quiser manter o comportamento original de 'negativar'
-	}
-
-	unit := amount / 100
-	(*invMap)[id] -= unit
-
-	if (*invMap)[id] <= 0 {
-		delete(*invMap, id)
+	switch any(new(K)).(type) {
+	case *ElementID:
+		m.Supply.Elements.RemoveItem(container.ItemID(id), amount/100)
+	case *SubstanceID:
+		m.Supply.Substances.RemoveItem(container.ItemID(id), amount/100)
+	case *MaterialID:
+		m.Supply.Materials.RemoveItem(container.ItemID(id), amount/100)
 	}
 }
