@@ -2,16 +2,6 @@ module github.com/GoGamesLab/Materials
 
 go 1.26.1
 
-require (
-    github.com/ilyakaznacheev/cleanenv v1.5.0
-    github.com/GoGamesLab/Inventory v0.0.0
-)
+require github.com/GoGamesLab/Inventory v0.0.0
 
 replace github.com/GoGamesLab/Inventory => ../Inventory
-
-require (
-	github.com/BurntSushi/toml v1.6.0 // indirect
-	github.com/joho/godotenv v1.5.1 // indirect
-	gopkg.in/yaml.v3 v3.0.1 // indirect
-	olympos.io/encoding/edn v0.0.0-20201019073823-d3554ca0b0a3 // indirect
-)
