@@ -7,13 +7,16 @@ import (
 	"sync"
 )
 
+// ID único para busca rápida
+type MaterialID uint16
+
 type PhysicalState uint8
 
 const (
-	Solid  PhysicalState = 1
-	Liquid PhysicalState = 2
-	Gas    PhysicalState = 3
-	Plasma PhysicalState = 4
+	Solid PhysicalState = iota + 1
+	Liquid
+	Gas
+	Plasma
 )
 
 type Composite struct {
@@ -37,10 +40,12 @@ type Material struct {
 }
 
 const (
-	AirID      MaterialID = 0
-	CoalID     MaterialID = 1
-	CrudeOilID MaterialID = 2
-	SteelID    MaterialID = 3
+	AirID MaterialID = iota
+	CoalID
+	CrudeOilID
+	IronBarID
+	IronPlateID
+	SteelID
 )
 
 var (

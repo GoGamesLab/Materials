@@ -7,8 +7,6 @@ import (
 
 // ID único para busca rápida
 type ElementID uint16
-type SubstanceID uint16
-type MaterialID uint16
 
 type Element struct {
 	ID            ElementID
@@ -37,46 +35,46 @@ const (
 )
 
 const (
-	VacuumID     ElementID = 0
-	HydrogenID   ElementID = 1
-	HeliumID     ElementID = 2
-	LithiumID    ElementID = 3
-	BerylliumID  ElementID = 4
-	BoronID      ElementID = 5
-	CarbonID     ElementID = 6
-	NitrogenID   ElementID = 7
-	OxygenID     ElementID = 8
-	FluorineID   ElementID = 9
-	NeonID       ElementID = 10
-	SodiumID     ElementID = 11
-	MagnesiumID  ElementID = 12
-	AluminiumID  ElementID = 13
-	SiliconID    ElementID = 14
-	PhosphorusID ElementID = 15
-	SulfurID     ElementID = 16
-	ChlorineID   ElementID = 17
-	ArgonID      ElementID = 18
-	PotassiumID  ElementID = 19
-	CalciumID    ElementID = 20
-	TitaniumID   ElementID = 22
-	ChromiumID   ElementID = 24
-	ManganeseID  ElementID = 25
-	IronID       ElementID = 26
-	CobaltID     ElementID = 27
-	NickelID     ElementID = 28
-	CopperID     ElementID = 29
-	ZincID       ElementID = 30
-	GermaniumID  ElementID = 32
-	SilverID     ElementID = 47
-	TinID        ElementID = 50
-	XenonID      ElementID = 54
-	TungstenID   ElementID = 74
-	PlatinumID   ElementID = 78
-	GoldID       ElementID = 79
-	LeadID       ElementID = 82
-	ThoriumID    ElementID = 90
-	UraniumID    ElementID = 92
-	PlutoniumID  ElementID = 94
+	VacuumID ElementID = iota
+	HydrogenID
+	HeliumID
+	LithiumID
+	BerylliumID
+	BoronID
+	CarbonID
+	NitrogenID
+	OxygenID
+	FluorineID
+	NeonID
+	SodiumID
+	MagnesiumID
+	AluminiumID
+	SiliconID
+	PhosphorusID
+	SulfurID
+	ChlorineID
+	ArgonID
+	PotassiumID
+	CalciumID
+	TitaniumID
+	ChromiumID
+	ManganeseID
+	IronID
+	CobaltID
+	NickelID
+	CopperID
+	ZincID
+	GermaniumID
+	SilverID
+	TinID
+	XenonID
+	TungstenID
+	PlatinumID
+	GoldID
+	LeadID
+	ThoriumID
+	UraniumID
+	PlutoniumID
 )
 
 var (

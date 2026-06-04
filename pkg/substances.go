@@ -5,6 +5,9 @@ import (
 	"sync"
 )
 
+// ID único para busca rápida
+type SubstanceID uint16
+
 // Representa a proporção química (ex: H2O -> H:2, O:1)
 type ChemicalBond struct {
 	Element ElementID
@@ -30,22 +33,22 @@ func (s Substance) GetMolecularWeight() float64 {
 }
 
 const (
-	PureHydrogenID   SubstanceID = 0
-	CarbonDioxideID  SubstanceID = 1
-	WaterID          SubstanceID = 2
-	SodiumChlorideID SubstanceID = 3
-	CarbonMonoxideID SubstanceID = 4
-	HydrogenOxideID  SubstanceID = 5
-	MethaneID        SubstanceID = 6  // Hidrocarboneto leve (Gás)
-	ParaffinID       SubstanceID = 7  // Hidrocarboneto pesado (Sólido/Ceroso)
-	PureSulfurID     SubstanceID = 8  // Impureza comum (Enxofre puro)
-	PureCarbonID     SubstanceID = 9  // Carbono elementar (Grafite/Diamante)
-	PureIronID       SubstanceID = 10 // Ferro elementar (minério de ferro)
-	PureOxygenID     SubstanceID = 11
-	PureNitrogenID   SubstanceID = 12
-	PureSiliconID    SubstanceID = 13
-	PureArgonID      SubstanceID = 14
-	SugarID          SubstanceID = 15
+	PureHydrogenID SubstanceID = iota
+	CarbonDioxideID
+	WaterID
+	SodiumChlorideID
+	CarbonMonoxideID
+	HydrogenOxideID
+	MethaneID    // Hidrocarboneto leve (Gás)
+	ParaffinID   // Hidrocarboneto pesado (Sólido/Ceroso)
+	PureSulfurID // Impureza comum (Enxofre puro)
+	PureCarbonID // Carbono elementar (Grafite/Diamante)
+	PureIronID   // Ferro elementar (minério de ferro)
+	PureOxygenID
+	PureNitrogenID
+	PureSiliconID
+	PureArgonID
+	SugarID
 )
 
 var (
