@@ -2,28 +2,12 @@ package materials
 
 import (
 	"fmt"
-	"sync"
 )
 
-// ID único para busca rápida
-type ElementID uint16
-
-type Element struct {
-	ID            ElementID
-	Name          string
-	Symbol        string
-	Weight        float64
-	Category      string
-	IsRadioactive bool    // Para mecânicas de dano por radiação e fissão
-	FusionFuel    bool    // Se pode ser usado em reatores de fusão (H, He, Li)
-	BoilingPoint  float32 // Temperatura (ºC) em que ele vira gás/sai do material
-	Volatility    float32 // Fator de 0.0 a 1.0 (quão rápido ele escapa ao ferver)
-}
-
-type CategoryType int
+type ElementType int
 
 const (
-	Nonmetal CategoryType = iota
+	Nonmetal ElementType = iota
 	AlkaliMetal
 	AlkalineEarthMetal
 	PostTransitionMetal
@@ -75,11 +59,11 @@ const (
 	ThoriumID
 	UraniumID
 	PlutoniumID
+	CesiumID
 )
 
 var (
-	Elements      = make(map[ElementID]Element)
-	elementsMutex sync.Mutex
+	Elements = make(map[ElementID]Element)
 )
 
 func init() {
@@ -129,12 +113,10 @@ func init() {
 	RegisterElement(Element{ThoriumID, "Thorium", "Th", 232.04, "Actinide", true, false, 4788, 0.05})
 	RegisterElement(Element{UraniumID, "Uranium", "U", 238.03, "Actinide", true, false, 4131, 0.05})
 	RegisterElement(Element{PlutoniumID, "Plutonium", "Pu", 244, "Actinide", true, false, 3228, 0.05})
+	RegisterElement(Element{CesiumID, "Cesium", "Cs", 132.9, "Alkali Metal", true, false, 671, 0.6})
 }
 
 func RegisterElement(e Element) error {
-	elementsMutex.Lock()
-	defer elementsMutex.Unlock()
-
 	if _, exists := Elements[e.ID]; exists {
 		return fmt.Errorf("🧨 Elemento com ID %d já registrado", e.ID)
 	}

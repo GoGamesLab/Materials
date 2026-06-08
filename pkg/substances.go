@@ -2,35 +2,9 @@ package materials
 
 import (
 	"fmt"
-	"sync"
 )
 
-// ID único para busca rápida
-type SubstanceID uint16
-
-// Representa a proporção química (ex: H2O -> H:2, O:1)
-type ChemicalBond struct {
-	Element ElementID
-	Amount  int
-}
-
-type Substance struct {
-	ID           SubstanceID
-	Name         string
-	Composition  []ChemicalBond
-	MeltingPoint float32
-	BoilingPoint float32
-}
-
-func (s Substance) GetMolecularWeight() float64 {
-	var total float64
-	for _, bond := range s.Composition {
-		// Busca o elemento no registro pelo ID (Número Atômico)
-		element := Elements[bond.Element]
-		total += element.Weight * float64(bond.Amount)
-	}
-	return total
-}
+type SubstanceState uint8
 
 const (
 	PureHydrogenID SubstanceID = iota
@@ -48,12 +22,16 @@ const (
 	PureNitrogenID
 	PureSiliconID
 	PureArgonID
+	UraniumTetrafluorideID
+	UraniumHexafluorideID
+	UraniumDioxideID
+	Cesium137ID
+	PlutoniumOxideID
 	SugarID
 )
 
 var (
-	Substances      = make(map[SubstanceID]Substance)
-	substancesMutex sync.Mutex
+	Substances = make(map[SubstanceID]Substance)
 )
 
 func init() {
@@ -204,18 +182,74 @@ func init() {
 			{OxygenID, 6},
 		},
 	})
+	RegisterSubstance(Substance{
+		ID:   UraniumTetrafluorideID,
+		Name: "Uranium Tetrafluoride",
+		Composition: []ChemicalBond{
+			{Element: UraniumID, Amount: 1},
+			{Element: FluorineID, Amount: 4},
+		},
+		MeltingPoint: 960.0,
+		BoilingPoint: 1417.0,
+	})
+	RegisterSubstance(Substance{
+		ID:   UraniumHexafluorideID,
+		Name: "Uranium Hexafluoride",
+		Composition: []ChemicalBond{
+			{Element: UraniumID, Amount: 1},
+			{Element: FluorineID, Amount: 6},
+		},
+		MeltingPoint: 64.0,
+		BoilingPoint: 56.5, // Sublima a pressões normais
+	})
+	RegisterSubstance(Substance{
+		ID:   UraniumDioxideID,
+		Name: "Uranium Dioxide",
+		Composition: []ChemicalBond{
+			{Element: UraniumID, Amount: 1},
+			{Element: OxygenID, Amount: 2},
+		},
+		MeltingPoint: 2865.0,
+		BoilingPoint: 3500.0,
+	})
+	RegisterSubstance(Substance{
+		ID:   Cesium137ID,
+		Name: "Cesium-137 Slurry",
+		Composition: []ChemicalBond{
+			{Element: CesiumID, Amount: 1},
+		},
+		MeltingPoint: 28.5,
+		BoilingPoint: 671.0,
+	})
+	RegisterSubstance(Substance{
+		ID:   PlutoniumOxideID,
+		Name: "Plutonium Dioxide",
+		Composition: []ChemicalBond{
+			{Element: PlutoniumID, Amount: 1},
+			{Element: OxygenID, Amount: 2},
+		},
+		MeltingPoint: 2400.0,
+		BoilingPoint: 2800.0,
+	})
 }
 
 func RegisterSubstance(s Substance) error {
-	substancesMutex.Lock()
-	defer substancesMutex.Unlock()
-
 	if _, exists := Substances[s.ID]; exists {
 		return fmt.Errorf("🧨 Substância com ID %d já registrada", s.ID)
 	}
 	Substances[s.ID] = s
 
 	return nil
+}
+
+func (s Substance) GetMolecularWeight() float64 {
+	var total float64
+	for _, bond := range s.Composition {
+		// Busca o elemento no registro pelo ID (Número Atômico)
+		element := Elements[bond.Element]
+		total += element.Weight * float64(bond.Amount)
+	}
+	return total
 }
 
 func GetSubstance(id SubstanceID) (*Substance, error) {
@@ -227,7 +261,7 @@ func GetSubstance(id SubstanceID) (*Substance, error) {
 
 type State int
 
-func (s Substance) GetState(currentTemp float32) PhysicalState {
+func (s Substance) GetState(currentTemp float32) SubstanceState {
 	// Precisamos definir também o MeltingPoint (Ponto de Fusão) na Substance
 	if currentTemp < s.MeltingPoint {
 		return Solid

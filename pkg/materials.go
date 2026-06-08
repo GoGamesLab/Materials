@@ -4,40 +4,14 @@ import (
 	"fmt"
 	"sort"
 	"strings"
-	"sync"
 )
 
-// ID único para busca rápida
-type MaterialID uint16
-
-type PhysicalState uint8
-
 const (
-	Solid PhysicalState = iota + 1
+	Solid SubstanceState = iota + 1
 	Liquid
 	Gas
 	Plasma
 )
-
-type Composite struct {
-	Substance  SubstanceID
-	Percentual float32
-}
-
-type Material struct {
-	ID            MaterialID // 2 bytes - Aponta para MaterialDefinition
-	Name          string
-	Composites    []Composite
-	State         PhysicalState // 1 byte  - Estado atual do bloco
-	HP            uint8         // 1 byte  - Integridade (0-255)
-	Temperature   float32       // 2 bytes - Temperatura local para simular mudanças de estado
-	Hardness      float32       // Para mecânica de mineração
-	Density       float32
-	SpecificHeat  float32 // Calor específico: quanto de energia precisa para mudar 1°C
-	EnergyDensity float32 // "Calorias": Joules por unidade de massa se queimado/reagido
-	FlashPoint    float32 // Temperatura em que o material entra em combustão
-	Conductivity  float32 // Quão rápido ele transfere calor para vizinhos
-}
 
 const (
 	AirID MaterialID = iota
@@ -46,12 +20,15 @@ const (
 	IronBarID
 	IronPlateID
 	SteelID
+	UraniumOreID
+	YellowcakeID
+	LEUFuelRodID
+	DepletedUraniumRodID
 )
 
 var (
-	Materials      = make(map[MaterialID]Material)
-	Signatures     = make(map[string][]MaterialID)
-	materialsMutex sync.Mutex
+	Materials  = make(map[MaterialID]Material)
+	Signatures = make(map[string][]MaterialID)
 )
 
 func init() {
@@ -118,6 +95,52 @@ func init() {
 		FlashPoint:    1400.0, // Ponto de amolecimento/fusão
 		Conductivity:  0.8,    // Ótimo condutor para transferir calor para a água
 	})
+	RegisterMaterial(Material{
+		ID: UraniumOreID, Name: "Uranium Ore",
+		Composites: []Composite{
+			{Substance: PureSiliconID, Percentual: 95},   // Pedra/Quartzo ao redor
+			{Substance: UraniumDioxideID, Percentual: 5}, // Apenas 5% de Urânio real
+		},
+		State: Solid, HP: 120, Hardness: 4.5, Density: 3.5,
+		SpecificHeat: 0.8, EnergyDensity: 0, FlashPoint: 0, Conductivity: 0.2,
+	})
+
+	// Yellowcake (Urânio processado e concentrado obtido na refinaria química)
+	RegisterMaterial(Material{
+		ID: YellowcakeID, Name: "Yellowcake",
+		Composites: []Composite{
+			{Substance: UraniumDioxideID, Percentual: 100},
+		},
+		State: Solid, HP: 50, Hardness: 1.5, Density: 5.5,
+		SpecificHeat: 0.4, EnergyDensity: 0, FlashPoint: 0, Conductivity: 0.1,
+	})
+
+	// Célula de Combustível Nuclear Enriquecido (Pronto para o Reator)
+	RegisterMaterial(Material{
+		ID: LEUFuelRodID, Name: "Enriched Uranium Fuel Rod",
+		Composites: []Composite{
+			{Substance: UraniumDioxideID, Percentual: 90}, // Urânio denso enriquecido simulado
+			{Substance: PureIronID, Percentual: 10},       // Revestimento protetor metálico (Zircaloy simplificado para Iron)
+		},
+		State: Solid, HP: 200, Hardness: 6.0, Density: 19.1,
+		SpecificHeat:  0.12,      // Esquenta incrivelmente rápido
+		EnergyDensity: 3900000.0, // Densidade energética absurda em MJ/kg comparado ao carvão (24.0)
+		FlashPoint:    2500.0,
+		Conductivity:  0.8,
+	})
+
+	// Barra de Combustível Exaurida (O Lixo Nuclear)
+	RegisterMaterial(Material{
+		ID: DepletedUraniumRodID, Name: "Depleted Uranium Fuel Rod",
+		Composites: []Composite{
+			{Substance: Cesium137ID, Percentual: 60},      // Subproduto de fissão perigoso
+			{Substance: PlutoniumOxideID, Percentual: 10}, // Transmutação de U-238 em Plutônio
+			{Substance: PureIronID, Percentual: 30},
+		},
+		State: Solid, HP: 200, Hardness: 6.0, Density: 18.0,
+		SpecificHeat: 0.15, EnergyDensity: 0, FlashPoint: 0, Conductivity: 0.5,
+	})
+
 }
 
 func GenerateSignature(composites []Composite) string {
@@ -139,9 +162,6 @@ func GenerateSignature(composites []Composite) string {
 }
 
 func RegisterMaterial(m Material) error {
-	materialsMutex.Lock()
-	defer materialsMutex.Unlock()
-
 	if _, exists := Materials[m.ID]; exists {
 		return fmt.Errorf("🧨 Material com ID %d já registrada", m.ID)
 	}
