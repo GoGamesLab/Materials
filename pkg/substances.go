@@ -18,6 +18,8 @@ const (
 	PureSulfurID // Impureza comum (Enxofre puro)
 	PureCarbonID // Carbono elementar (Grafite/Diamante)
 	PureIronID   // Ferro elementar (minério de ferro)
+	PurePhosphorusID
+	PureManganeseID
 	PureOxygenID
 	PureNitrogenID
 	PureSiliconID
@@ -143,6 +145,26 @@ func init() {
 		MeltingPoint: 115.2,
 		BoilingPoint: 444.6,
 	})
+
+	RegisterSubstance(Substance{
+		ID:   PurePhosphorusID,
+		Name: "Phosphorus",
+		Composition: []ChemicalBond{
+			{Element: PhosphorusID, Amount: 1},
+		},
+		MeltingPoint: 44.1,
+		BoilingPoint: 280.0,
+	})
+	RegisterSubstance(Substance{
+		ID:   PureManganeseID,
+		Name: "Manganese",
+		Composition: []ChemicalBond{
+			{Element: ManganeseID, Amount: 1},
+		},
+		MeltingPoint: 1244.0,
+		BoilingPoint: 2091.0,
+	})
+
 	RegisterSubstance(Substance{
 		ID:   PureIronID,
 		Name: "Iron",

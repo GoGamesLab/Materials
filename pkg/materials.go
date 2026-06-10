@@ -78,6 +78,49 @@ func init() {
 		FlashPoint:    60.0, // Perigoso: entra em combustão a temperaturas baixas
 		Conductivity:  0.1,  // Isolante térmico (comum em óleos)
 	})
+
+	RegisterMaterial(Material{
+		ID:   IronBarID,
+		Name: "Barra de ferro",
+		Composites: []Composite{
+			{PureIronID, 98},  // Majoritariamente Ferro
+			{PureSulfurID, 1}, // Com um pouco de impurezas
+			{PureSiliconID, 0.5},
+			{PureManganeseID, 0.25},
+			{PurePhosphorusID, 0.25},
+		},
+		State:         Solid,
+		HP:            255, // Máxima durabilidade
+		Temperature:   21,
+		Hardness:      7.0,    // Exige ferramentas avançadas
+		Density:       7.8,    // Muito pesado
+		SpecificHeat:  0.5,    // Esquenta muito rápido (bom para caldeiras)
+		EnergyDensity: 0.0,    // Aço não queima (geralmente)
+		FlashPoint:    1400.0, // Ponto de amolecimento/fusão
+		Conductivity:  0.8,    // Ótimo condutor para transferir calor para a água
+	})
+
+	RegisterMaterial(Material{
+		ID:   IronPlateID,
+		Name: "Chapa de ferro",
+		Composites: []Composite{
+			{PureIronID, 98},  // Majoritariamente Ferro
+			{PureSulfurID, 1}, // Com um pouco de impurezas
+			{PureSiliconID, 0.5},
+			{PureManganeseID, 0.25},
+			{PurePhosphorusID, 0.25},
+		},
+		State:         Solid,
+		HP:            255, // Máxima durabilidade
+		Temperature:   21,
+		Hardness:      7.0,    // Exige ferramentas avançadas
+		Density:       7.8,    // Muito pesado
+		SpecificHeat:  0.5,    // Esquenta muito rápido (bom para caldeiras)
+		EnergyDensity: 0.0,    // Aço não queima (geralmente)
+		FlashPoint:    1400.0, // Ponto de amolecimento/fusão
+		Conductivity:  0.8,    // Ótimo condutor para transferir calor para a água
+	})
+
 	RegisterMaterial(Material{
 		ID:   SteelID,
 		Name: "Steel",
@@ -95,34 +138,50 @@ func init() {
 		FlashPoint:    1400.0, // Ponto de amolecimento/fusão
 		Conductivity:  0.8,    // Ótimo condutor para transferir calor para a água
 	})
+
 	RegisterMaterial(Material{
 		ID: UraniumOreID, Name: "Uranium Ore",
 		Composites: []Composite{
-			{Substance: PureSiliconID, Percentual: 95},   // Pedra/Quartzo ao redor
-			{Substance: UraniumDioxideID, Percentual: 5}, // Apenas 5% de Urânio real
+			{PureSiliconID, 95},   // Pedra/Quartzo ao redor
+			{UraniumDioxideID, 5}, // Apenas 5% de Urânio real
 		},
-		State: Solid, HP: 120, Hardness: 4.5, Density: 3.5,
-		SpecificHeat: 0.8, EnergyDensity: 0, FlashPoint: 0, Conductivity: 0.2,
+		State:         Solid,
+		HP:            120,
+		Hardness:      4.5,
+		Density:       3.5,
+		SpecificHeat:  0.8,
+		EnergyDensity: 0,
+		FlashPoint:    0,
+		Conductivity:  0.2,
 	})
 
 	// Yellowcake (Urânio processado e concentrado obtido na refinaria química)
 	RegisterMaterial(Material{
 		ID: YellowcakeID, Name: "Yellowcake",
 		Composites: []Composite{
-			{Substance: UraniumDioxideID, Percentual: 100},
+			{UraniumDioxideID, 100},
 		},
-		State: Solid, HP: 50, Hardness: 1.5, Density: 5.5,
-		SpecificHeat: 0.4, EnergyDensity: 0, FlashPoint: 0, Conductivity: 0.1,
+		State:         Solid,
+		HP:            50,
+		Hardness:      1.5,
+		Density:       5.5,
+		SpecificHeat:  0.4,
+		EnergyDensity: 0,
+		FlashPoint:    0,
+		Conductivity:  0.1,
 	})
 
 	// Célula de Combustível Nuclear Enriquecido (Pronto para o Reator)
 	RegisterMaterial(Material{
 		ID: LEUFuelRodID, Name: "Enriched Uranium Fuel Rod",
 		Composites: []Composite{
-			{Substance: UraniumDioxideID, Percentual: 90}, // Urânio denso enriquecido simulado
-			{Substance: PureIronID, Percentual: 10},       // Revestimento protetor metálico (Zircaloy simplificado para Iron)
+			{UraniumDioxideID, 90}, // Urânio denso enriquecido simulado
+			{PureIronID, 10},       // Revestimento protetor metálico (Zircaloy simplificado para Iron)
 		},
-		State: Solid, HP: 200, Hardness: 6.0, Density: 19.1,
+		State:         Solid,
+		HP:            200,
+		Hardness:      6.0,
+		Density:       19.1,
 		SpecificHeat:  0.12,      // Esquenta incrivelmente rápido
 		EnergyDensity: 3900000.0, // Densidade energética absurda em MJ/kg comparado ao carvão (24.0)
 		FlashPoint:    2500.0,
@@ -133,12 +192,18 @@ func init() {
 	RegisterMaterial(Material{
 		ID: DepletedUraniumRodID, Name: "Depleted Uranium Fuel Rod",
 		Composites: []Composite{
-			{Substance: Cesium137ID, Percentual: 60},      // Subproduto de fissão perigoso
-			{Substance: PlutoniumOxideID, Percentual: 10}, // Transmutação de U-238 em Plutônio
-			{Substance: PureIronID, Percentual: 30},
+			{Cesium137ID, 60},      // Subproduto de fissão perigoso
+			{PlutoniumOxideID, 10}, // Transmutação de U-238 em Plutônio
+			{PureIronID, 30},
 		},
-		State: Solid, HP: 200, Hardness: 6.0, Density: 18.0,
-		SpecificHeat: 0.15, EnergyDensity: 0, FlashPoint: 0, Conductivity: 0.5,
+		State:         Solid,
+		HP:            200,
+		Hardness:      6.0,
+		Density:       18.0,
+		SpecificHeat:  0.15,
+		EnergyDensity: 0,
+		FlashPoint:    0,
+		Conductivity:  0.5,
 	})
 
 }
