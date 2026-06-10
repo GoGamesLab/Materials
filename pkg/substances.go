@@ -40,165 +40,165 @@ func init() {
 	RegisterSubstance(Substance{
 		ID:   PureCarbonID,
 		Name: "Carbon",
-		Composition: []ChemicalBond{
+		composition: []ChemicalBond{
 			{Element: CarbonID, Amount: 1},
 		},
-		MeltingPoint: -78.5, // Sublima (vira gás direto)
-		BoilingPoint: -78.5,
+		meltingPoint: -78.5, // Sublima (vira gás direto)
+		boilingPoint: -78.5,
 	})
 	RegisterSubstance(Substance{
 		ID:   PureHydrogenID,
 		Name: "Hydrogen",
-		Composition: []ChemicalBond{
+		composition: []ChemicalBond{
 			{Element: HydrogenID, Amount: 1},
 		},
-		MeltingPoint: -259.1,
-		BoilingPoint: -252.9,
+		meltingPoint: -259.1,
+		boilingPoint: -252.9,
 	})
 	RegisterSubstance(Substance{
 		ID:   PureOxygenID,
 		Name: "Oxygen",
-		Composition: []ChemicalBond{
+		composition: []ChemicalBond{
 			{Element: OxygenID, Amount: 1},
 		},
-		MeltingPoint: -218.8,
-		BoilingPoint: -183.0,
+		meltingPoint: -218.8,
+		boilingPoint: -183.0,
 	})
 	RegisterSubstance(Substance{
 		ID:   CarbonDioxideID,
 		Name: "Carbon Dioxide",
-		Composition: []ChemicalBond{
+		composition: []ChemicalBond{
 			{Element: CarbonID, Amount: 1},
 			{Element: OxygenID, Amount: 2},
 		},
-		MeltingPoint: -78.5, // Sublima (vira gás direto)
-		BoilingPoint: -78.5,
+		meltingPoint: -78.5, // Sublima (vira gás direto)
+		boilingPoint: -78.5,
 	})
 	RegisterSubstance(Substance{
 		// Água Oxigenada (H2O2) simplificada
 		ID:   HydrogenOxideID,
 		Name: "Hydrogen Peroxide",
-		Composition: []ChemicalBond{
+		composition: []ChemicalBond{
 			{Element: HydrogenID, Amount: 2},
 			{Element: OxygenID, Amount: 2},
 		},
-		MeltingPoint: -0.4,
-		BoilingPoint: 150.2,
+		meltingPoint: -0.4,
+		boilingPoint: 150.2,
 	})
 	RegisterSubstance(Substance{
 		ID:   CarbonMonoxideID,
 		Name: "Carbon Monoxide",
-		Composition: []ChemicalBond{
+		composition: []ChemicalBond{
 			{Element: CarbonID, Amount: 1},
 			{Element: OxygenID, Amount: 1},
 		},
-		MeltingPoint: -205.0,
-		BoilingPoint: -191.5,
+		meltingPoint: -205.0,
+		boilingPoint: -191.5,
 	})
 	RegisterSubstance(Substance{
 		ID:   WaterID,
 		Name: "Water",
-		Composition: []ChemicalBond{
+		composition: []ChemicalBond{
 			{Element: HydrogenID, Amount: 2},
 			{Element: OxygenID, Amount: 1},
 		},
-		MeltingPoint: 0.0,
-		BoilingPoint: 100.0,
+		meltingPoint: 0.0,
+		boilingPoint: 100.0,
 	})
 	RegisterSubstance(Substance{
 		// Sal de Cozinha (NaCl)
 		ID:   SodiumChlorideID,
 		Name: "Sodium Chloride",
-		Composition: []ChemicalBond{
+		composition: []ChemicalBond{
 			{Element: SodiumID, Amount: 1},
 			{Element: ChlorineID, Amount: 1},
 		},
-		MeltingPoint: 801.0,
-		BoilingPoint: 1465.0,
+		meltingPoint: 801.0,
+		boilingPoint: 1465.0,
 	})
 	RegisterSubstance(Substance{
 		ID:   MethaneID,
 		Name: "Methane",
-		Composition: []ChemicalBond{
+		composition: []ChemicalBond{
 			{Element: CarbonID, Amount: 1},
 			{Element: HydrogenID, Amount: 4},
 		},
-		MeltingPoint: -182.5,
-		BoilingPoint: -161.5,
+		meltingPoint: -182.5,
+		boilingPoint: -161.5,
 	})
 	RegisterSubstance(Substance{
 		ID:   ParaffinID,
 		Name: "Paraffin",
-		Composition: []ChemicalBond{
+		composition: []ChemicalBond{
 			{Element: CarbonID, Amount: 20},
 			{Element: HydrogenID, Amount: 42},
 		},
-		MeltingPoint: 47.0,
-		BoilingPoint: 370.0,
+		meltingPoint: 47.0,
+		boilingPoint: 370.0,
 	})
 	RegisterSubstance(Substance{
 		ID:   PureSulfurID,
 		Name: "Sulfur",
-		Composition: []ChemicalBond{
+		composition: []ChemicalBond{
 			{Element: SulfurID, Amount: 1},
 		},
-		MeltingPoint: 115.2,
-		BoilingPoint: 444.6,
+		meltingPoint: 115.2,
+		boilingPoint: 444.6,
 	})
 
 	RegisterSubstance(Substance{
 		ID:   PurePhosphorusID,
 		Name: "Phosphorus",
-		Composition: []ChemicalBond{
+		composition: []ChemicalBond{
 			{Element: PhosphorusID, Amount: 1},
 		},
-		MeltingPoint: 44.1,
-		BoilingPoint: 280.0,
+		meltingPoint: 44.1,
+		boilingPoint: 280.0,
 	})
 	RegisterSubstance(Substance{
 		ID:   PureManganeseID,
 		Name: "Manganese",
-		Composition: []ChemicalBond{
+		composition: []ChemicalBond{
 			{Element: ManganeseID, Amount: 1},
 		},
-		MeltingPoint: 1244.0,
-		BoilingPoint: 2091.0,
+		meltingPoint: 1244.0,
+		boilingPoint: 2091.0,
 	})
 
 	RegisterSubstance(Substance{
 		ID:   PureIronID,
 		Name: "Iron",
-		Composition: []ChemicalBond{
+		composition: []ChemicalBond{
 			{Element: IronID, Amount: 1},
 		},
-		MeltingPoint: 1538.0,
-		BoilingPoint: 2862.0,
+		meltingPoint: 1538.0,
+		boilingPoint: 2862.0,
 	})
 	RegisterSubstance(Substance{
 		ID:   PureNitrogenID,
 		Name: "Nitrogen",
-		Composition: []ChemicalBond{
+		composition: []ChemicalBond{
 			{Element: NitrogenID, Amount: 1},
 		},
 	})
 	RegisterSubstance(Substance{
 		ID:   PureSiliconID,
 		Name: "Silicon",
-		Composition: []ChemicalBond{
+		composition: []ChemicalBond{
 			{Element: SiliconID, Amount: 1},
 		},
 	})
 	RegisterSubstance(Substance{
 		ID:   PureArgonID,
 		Name: "Argon",
-		Composition: []ChemicalBond{
+		composition: []ChemicalBond{
 			{Element: ArgonID, Amount: 1},
 		},
 	})
 	RegisterSubstance(Substance{
 		ID:   SugarID,
 		Name: "Sugar",
-		Composition: []ChemicalBond{
+		composition: []ChemicalBond{
 			{CarbonID, 6},
 			{HydrogenID, 12},
 			{OxygenID, 6},
@@ -207,51 +207,51 @@ func init() {
 	RegisterSubstance(Substance{
 		ID:   UraniumTetrafluorideID,
 		Name: "Uranium Tetrafluoride",
-		Composition: []ChemicalBond{
+		composition: []ChemicalBond{
 			{Element: UraniumID, Amount: 1},
 			{Element: FluorineID, Amount: 4},
 		},
-		MeltingPoint: 960.0,
-		BoilingPoint: 1417.0,
+		meltingPoint: 960.0,
+		boilingPoint: 1417.0,
 	})
 	RegisterSubstance(Substance{
 		ID:   UraniumHexafluorideID,
 		Name: "Uranium Hexafluoride",
-		Composition: []ChemicalBond{
+		composition: []ChemicalBond{
 			{Element: UraniumID, Amount: 1},
 			{Element: FluorineID, Amount: 6},
 		},
-		MeltingPoint: 64.0,
-		BoilingPoint: 56.5, // Sublima a pressões normais
+		meltingPoint: 64.0,
+		boilingPoint: 56.5, // Sublima a pressões normais
 	})
 	RegisterSubstance(Substance{
 		ID:   UraniumDioxideID,
 		Name: "Uranium Dioxide",
-		Composition: []ChemicalBond{
+		composition: []ChemicalBond{
 			{Element: UraniumID, Amount: 1},
 			{Element: OxygenID, Amount: 2},
 		},
-		MeltingPoint: 2865.0,
-		BoilingPoint: 3500.0,
+		meltingPoint: 2865.0,
+		boilingPoint: 3500.0,
 	})
 	RegisterSubstance(Substance{
 		ID:   Cesium137ID,
 		Name: "Cesium-137 Slurry",
-		Composition: []ChemicalBond{
+		composition: []ChemicalBond{
 			{Element: CesiumID, Amount: 1},
 		},
-		MeltingPoint: 28.5,
-		BoilingPoint: 671.0,
+		meltingPoint: 28.5,
+		boilingPoint: 671.0,
 	})
 	RegisterSubstance(Substance{
 		ID:   PlutoniumOxideID,
 		Name: "Plutonium Dioxide",
-		Composition: []ChemicalBond{
+		composition: []ChemicalBond{
 			{Element: PlutoniumID, Amount: 1},
 			{Element: OxygenID, Amount: 2},
 		},
-		MeltingPoint: 2400.0,
-		BoilingPoint: 2800.0,
+		meltingPoint: 2400.0,
+		boilingPoint: 2800.0,
 	})
 }
 
@@ -266,7 +266,7 @@ func RegisterSubstance(s Substance) error {
 
 func (s Substance) GetMolecularWeight() float64 {
 	var total float64
-	for _, bond := range s.Composition {
+	for _, bond := range s.composition {
 		// Busca o elemento no registro pelo ID (Número Atômico)
 		element := Elements[bond.Element]
 		total += element.Weight * float64(bond.Amount)
@@ -285,10 +285,10 @@ type State int
 
 func (s Substance) GetState(currentTemp float32) SubstanceState {
 	// Precisamos definir também o MeltingPoint (Ponto de Fusão) na Substance
-	if currentTemp < s.MeltingPoint {
+	if currentTemp < s.meltingPoint {
 		return Solid
 	}
-	if currentTemp < s.BoilingPoint {
+	if currentTemp < s.boilingPoint {
 		return Liquid
 	}
 	return Gas
@@ -296,7 +296,7 @@ func (s Substance) GetState(currentTemp float32) SubstanceState {
 
 func (s *Substance) Reduce(quantity float32) map[ElementID]float32 {
 	r := make(map[ElementID]float32)
-	for _, c := range s.Composition {
+	for _, c := range s.composition {
 		r[c.Element] = float32(c.Amount) * quantity
 	}
 
