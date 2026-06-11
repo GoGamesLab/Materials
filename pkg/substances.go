@@ -256,7 +256,7 @@ func init() {
 
 func RegisterSubstance(s Substance) error {
 	if _, exists := Substances[s.ID]; exists {
-		return fmt.Errorf("🧨 Substância com ID %d já registrada", s.ID)
+		return fmt.Errorf("🧨 Substância com ID %s já registrada", s.ID)
 	}
 	Substances[s.ID] = s
 

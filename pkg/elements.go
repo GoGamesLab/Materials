@@ -107,7 +107,7 @@ func init() {
 
 func RegisterElement(e Element) error {
 	if _, exists := Elements[e.ID]; exists {
-		return fmt.Errorf("🧨 Elemento com ID %d já registrado", e.ID)
+		return fmt.Errorf("🧨 Elemento com ID %s já registrado", e.ID)
 	}
 
 	Elements[e.ID] = e

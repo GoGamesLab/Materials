@@ -155,14 +155,14 @@ func GenerateSignature(composites []Composite) string {
 	// 2. Montar a string: "SubstanceID:Percentage|..."
 	var sb strings.Builder
 	for _, c := range temp {
-		fmt.Fprintf(&sb, "%d|", c.Substance)
+		fmt.Fprintf(&sb, "%s|", c.Substance)
 	}
 	return sb.String()
 }
 
 func RegisterMaterial(m Material) error {
 	if _, exists := Materials[m.ID]; exists {
-		return fmt.Errorf("🧨 Material com ID %d já registrada", m.ID)
+		return fmt.Errorf("🧨 Material com ID %s já registrada", m.ID)
 	}
 
 	// 1. Gera a assinatura antes de salvar
