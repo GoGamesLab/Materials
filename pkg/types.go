@@ -1,43 +1,76 @@
 package materials
 
-// ID único para busca rápida
-type ElementID uint16
-type SubstanceID uint16
-type MaterialID uint16
+import (
+	"encoding/json"
+	"fmt"
+)
+
+// IDs únicos para busca rápida
+type ElementID string
+type SubstanceID string
+type MaterialID string
+
+type SubstanceState uint8
+
+const (
+	Solid SubstanceState = iota + 1
+	Liquid
+	Gas
+	Plasma
+)
+
+func (s *SubstanceState) UnmarshalJSON(b []byte) error {
+	var stateStr string
+	if err := json.Unmarshal(b, &stateStr); err != nil {
+		return err
+	}
+	switch stateStr {
+	case "Solid":
+		*s = Solid
+	case "Liquid":
+		*s = Liquid
+	case "Gas":
+		*s = Gas
+	case "Plasma":
+		*s = Plasma
+	default:
+		return fmt.Errorf("🧨 Estado desconhecido: %s", stateStr)
+	}
+	return nil
+}
 
 type Element struct {
-	ID           ElementID
-	Name         string
-	Symbol       string
-	Weight       float64
-	BoilingPoint float32 // Temperatura (ºC) em que ele vira gás/sai do material
-	Volatility   float32 // Fator de 0.0 a 1.0 (quão rápido ele escapa ao ferver)
+	ID           ElementID `json:"id"` // Symbol
+	Name         string    `json:"name"`
+	Weight       float64   `json:"weight"`
+	BoilingPoint float32   `json:"boilingPoint"` // Temperatura (ºC) em que ele vira gás/sai do material
+	Volatility   float32   `json:"volatility"`   // Fator de 0.0 a 1.0 (quão rápido ele escapa ao ferver)
 }
 
 // Representa a proporção química (ex: H2O -> H:2, O:1)
 type ChemicalBond struct {
-	Element ElementID
-	Amount  int
+	Element ElementID `json:"element"`
+	Amount  int       `json:"amount"`
 }
 
 type Substance struct {
-	ID           SubstanceID
-	Name         string
-	composition  []ChemicalBond
-	meltingPoint float32
-	boilingPoint float32
+	ID           SubstanceID    `json:"id"`
+	Name         string         `json:"name"`
+	Composition  []ChemicalBond `json:"composition"`
+	MeltingPoint float32        `json:"meltingPoint"`
+	BoilingPoint float32        `json:"boilingPoint"`
 }
 
 type Composite struct {
-	Substance  SubstanceID
-	Percentual float32
+	Substance  SubstanceID `json:"substance"`
+	Percentual float32     `json:"percentual"`
 }
 
 type Material struct {
-	ID          MaterialID // 2 bytes - Aponta para MaterialDefinition
-	Name        string
-	composites  []Composite
-	State       SubstanceState // 1 byte  - Estado atual do bloco
-	Temperature float32        // 2 bytes - Temperatura de instância para simular mudanças de estado
-	Hardness    float32        // Para mecânica de mineração
+	ID          MaterialID     `json:"id"`
+	Name        string         `json:"name"`
+	Composites  []Composite    `json:"composites"`
+	State       SubstanceState `json:"state"`
+	Temperature float32        `json:"temperature"`
+	Hardness    float32        `json:"hardness"`
 }
