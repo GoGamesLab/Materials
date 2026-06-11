@@ -55,7 +55,7 @@ var (
 )
 
 func init() {
-	loadElementsFromJSON("../../Grind/assets/materials/elements.json")
+	loadElementsFromJSON("../../Grind/assets/resources/elements.json")
 	// RegisterElement(Element{VacuumID, "Vacuum", "V", 0, 0, 1.0})
 	// // --- Período 1 ---
 	// RegisterElement(Element{HydrogenID, "Hydrogen", "H", 1.008, -252, 0.9})

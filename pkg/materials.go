@@ -27,7 +27,7 @@ var (
 )
 
 func init() {
-	loadMaterialsFromJSON("../../Grind/assets/materials/materials.json")
+	loadMaterialsFromJSON("../../Grind/assets/resources/materials.json")
 	// RegisterMaterial(Material{
 	// 	ID:   AirID,
 	// 	Name: "Air",

@@ -37,7 +37,7 @@ var (
 )
 
 func init() {
-	loadSubstancesFromJSON("../../Grind/assets/materials/substances.json")
+	loadSubstancesFromJSON("../../Grind/assets/resources/substances.json")
 	// RegisterSubstance(Substance{
 	// 	ID:   PureCarbonID,
 	// 	Name: "Carbon",
