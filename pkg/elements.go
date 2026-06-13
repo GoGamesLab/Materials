@@ -24,6 +24,7 @@ func GetElement(id ElementID) (*Element, error) {
 	if e, ok := Elements[id]; ok {
 		return &e, nil
 	}
+
 	return nil, fmt.Errorf("🧨 Element %v: not found", id)
 }
 
