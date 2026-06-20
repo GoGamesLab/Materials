@@ -5,7 +5,6 @@ import (
 	"fmt"
 )
 
-// IDs únicos para busca rápida
 type ElementID string
 type SubstanceID string
 type MaterialID string
@@ -40,14 +39,13 @@ func (s *SubstanceState) UnmarshalJSON(b []byte) error {
 }
 
 type Element struct {
-	ID           ElementID `json:"id"` // Symbol
+	ID           ElementID `json:"id"`
 	Name         string    `json:"name"`
 	Weight       float64   `json:"weight"`
-	BoilingPoint float32   `json:"boilingPoint"` // Temperatura (ºC) em que ele vira gás/sai do material
-	Volatility   float32   `json:"volatility"`   // Fator de 0.0 a 1.0 (quão rápido ele escapa ao ferver)
+	BoilingPoint float32   `json:"boilingPoint"`
+	Volatility   float32   `json:"volatility"`
 }
 
-// Representa a proporção química (ex: H2O -> H:2, O:1)
 type ChemicalBond struct {
 	Element ElementID `json:"element"`
 	Amount  int       `json:"amount"`

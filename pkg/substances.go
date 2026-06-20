@@ -23,13 +23,13 @@ func GetSubstance(id SubstanceID) (*Substance, error) {
 	if s, ok := Substances[id]; ok {
 		return &s, nil
 	}
+
 	return nil, fmt.Errorf("🧨 Substance %v: not found", id)
 }
 
 func (s Substance) GetMolecularWeight() float64 {
 	var total float64
 	for _, bond := range s.Composition {
-		// Busca o elemento no registro pelo ID (Número Atômico)
 		element := Elements[bond.Element]
 		total += element.Weight * float64(bond.Amount)
 	}
@@ -39,7 +39,6 @@ func (s Substance) GetMolecularWeight() float64 {
 type State int
 
 func (s Substance) GetState(currentTemp float32) SubstanceState {
-	// Precisamos definir também o MeltingPoint (Ponto de Fusão) na Substance
 	if currentTemp < s.MeltingPoint {
 		return Solid
 	}
@@ -59,17 +58,21 @@ func (s *Substance) Reduce(quantity float32) map[ElementID]float32 {
 }
 
 func LoadSubstancesFromJSON(substancesPath string) error {
-	// Carregar Substâncias
 	sData, err := os.ReadFile(substancesPath)
 	if err != nil {
-		return fmt.Errorf("erro lendo substâncias: %w", err)
+		return err
 	}
+
 	var sList []Substance
 	if err := json.Unmarshal(sData, &sList); err != nil {
 		return err
 	}
+
 	for _, s := range sList {
-		Substances[s.ID] = s
+		subs := s
+		if err := RegisterSubstance(subs); err != nil {
+			return err
+		}
 	}
 
 	return nil

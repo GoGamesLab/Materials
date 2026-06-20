@@ -14,8 +14,6 @@ var (
 )
 
 func GenerateSignature(composites []Composite) string {
-	// 1. Criar uma cópia para não mexer no original e ordenar por ID
-	// Isso garante que a assinatura seja determinística
 	temp := make([]Composite, len(composites))
 	copy(temp, composites)
 
@@ -23,11 +21,11 @@ func GenerateSignature(composites []Composite) string {
 		return temp[i].Substance < temp[j].Substance
 	})
 
-	// 2. Montar a string: "SubstanceID:Percentage|..."
 	var sb strings.Builder
 	for _, c := range temp {
 		fmt.Fprintf(&sb, "%s|", c.Substance)
 	}
+
 	return sb.String()
 }
 
@@ -36,10 +34,8 @@ func RegisterMaterial(m Material) error {
 		return fmt.Errorf("🧨 Material com ID %s já registrada", m.ID)
 	}
 
-	// 1. Gera a assinatura antes de salvar
 	sig := GenerateSignature(m.Composites)
 
-	// 2. Registra nos dois mapas
 	Materials[m.ID] = m
 	Signatures[sig] = append(Signatures[sig], m.ID)
 
@@ -77,20 +73,21 @@ func Compositions(composite []Composite) ([]Material, error) {
 }
 
 func LoadMaterialsFromJSON(materialsPath string) error {
-
-	// Carregar Materiais
 	mData, err := os.ReadFile(materialsPath)
 	if err != nil {
-		return fmt.Errorf("erro lendo materiais: %w", err)
+		return err
 	}
+
 	var mList []Material
 	if err := json.Unmarshal(mData, &mList); err != nil {
 		return err
 	}
+
 	for _, m := range mList {
-		Materials[m.ID] = m
-		sig := GenerateSignature(m.Composites)
-		Signatures[sig] = append(Signatures[sig], m.ID)
+		mat := m
+		if err := RegisterMaterial(mat); err != nil {
+			return err
+		}
 	}
 
 	return nil

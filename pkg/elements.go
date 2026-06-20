@@ -29,17 +29,21 @@ func GetElement(id ElementID) (*Element, error) {
 }
 
 func LoadElementsFromJSON(elementsPath string) error {
-	// Carregar Elementos
 	eData, err := os.ReadFile(elementsPath)
 	if err != nil {
-		return fmt.Errorf("erro lendo elementos: %w", err)
+		return err
 	}
+
 	var eList []Element
 	if err := json.Unmarshal(eData, &eList); err != nil {
 		return err
 	}
+
 	for _, e := range eList {
-		Elements[e.ID] = e
+		elem := e
+		if err := RegisterElement(elem); err != nil {
+			return err
+		}
 	}
 
 	return nil
