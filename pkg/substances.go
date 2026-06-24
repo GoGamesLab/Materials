@@ -7,21 +7,21 @@ import (
 )
 
 var (
-	Substances = make(map[SubstanceID]Substance)
+	Substances = make(map[SubstanceID]*Substance)
 )
 
 func RegisterSubstance(s Substance) error {
 	if _, exists := Substances[s.ID]; exists {
 		return fmt.Errorf("🧨 Substância com ID %s já registrada", s.ID)
 	}
-	Substances[s.ID] = s
+	Substances[s.ID] = &s
 
 	return nil
 }
 
 func GetSubstance(id SubstanceID) (*Substance, error) {
 	if s, ok := Substances[id]; ok {
-		return &s, nil
+		return s, nil
 	}
 
 	return nil, fmt.Errorf("🧨 Substance %v: not found", id)

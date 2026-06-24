@@ -7,7 +7,7 @@ import (
 )
 
 var (
-	Elements = make(map[ElementID]Element)
+	Elements = make(map[ElementID]*Element)
 )
 
 func RegisterElement(e Element) error {
@@ -15,14 +15,14 @@ func RegisterElement(e Element) error {
 		return fmt.Errorf("🧨 Elemento com ID %s já registrado", e.ID)
 	}
 
-	Elements[e.ID] = e
+	Elements[e.ID] = &e
 
 	return nil
 }
 
 func GetElement(id ElementID) (*Element, error) {
 	if e, ok := Elements[id]; ok {
-		return &e, nil
+		return e, nil
 	}
 
 	return nil, fmt.Errorf("🧨 Element %v: not found", id)

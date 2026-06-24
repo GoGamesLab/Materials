@@ -9,7 +9,7 @@ import (
 )
 
 var (
-	Materials  = make(map[MaterialID]Material)
+	Materials  = make(map[MaterialID]*Material)
 	Signatures = make(map[string][]MaterialID)
 )
 
@@ -36,7 +36,7 @@ func RegisterMaterial(m Material) error {
 
 	sig := GenerateSignature(m.Composites)
 
-	Materials[m.ID] = m
+	Materials[m.ID] = &m
 	Signatures[sig] = append(Signatures[sig], m.ID)
 
 	return nil
@@ -44,7 +44,7 @@ func RegisterMaterial(m Material) error {
 
 func GetMaterial(id MaterialID) (*Material, error) {
 	if m, ok := Materials[id]; ok {
-		return &m, nil
+		return m, nil
 	}
 	return nil, fmt.Errorf("🧨 Material %v: not found", id)
 }
@@ -66,7 +66,7 @@ func Compositions(composite []Composite) ([]Material, error) {
 	}
 	var result []Material
 	for _, id := range ids {
-		result = append(result, Materials[id])
+		result = append(result, *Materials[id])
 	}
 
 	return result, nil
