@@ -52,7 +52,7 @@ func GetMaterial(id MaterialID) (*Material, error) {
 func (m *Material) Reduction(quantity float32) map[SubstanceID]float32 {
 	r := make(map[SubstanceID]float32)
 	for _, c := range m.Composites {
-		r[c.Substance] = (c.Percentual / 100) * quantity
+		r[c.Substance] = c.Quantity * quantity
 	}
 
 	return r

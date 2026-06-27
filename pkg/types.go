@@ -60,14 +60,15 @@ type Substance struct {
 }
 
 type Composite struct {
-	Substance  SubstanceID `json:"substance"`
-	Percentual float32     `json:"percentual"`
+	Substance SubstanceID `json:"substance"`
+	Quantity  float32     `json:"quantity"`
 }
 
 type Material struct {
 	ID          MaterialID     `json:"id"`
 	Name        string         `json:"name"`
 	Composites  []Composite    `json:"composites"`
+	Units       float32        `json:"units"`
 	State       SubstanceState `json:"state"`
 	Temperature float32        `json:"temperature"`
 	Hardness    float32        `json:"hardness"`
